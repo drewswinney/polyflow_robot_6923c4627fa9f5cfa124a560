@@ -1,0 +1,22 @@
+logging { level = "info" }
+
+loki.source.journal "system" {
+  forward_to = [loki.process.robot.receiver]
+}
+
+loki.process "robot" {
+  stage.static_labels {
+    values = {
+      robot_id = "6923c4627fa9f5cfa124a560",
+      host     = "6923c4627fa9f5cfa124a560.local",
+    }
+  }
+
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://127.0.0.1:3100/loki/api/v1/push"
+  }
+}
